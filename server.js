@@ -33,10 +33,21 @@ const server = http.createServer(app.handler.bind(app))
 const wss = new WebSocketServer({ server })
 
 wss.on('connection', (socket) => {
-	console.log('New user connected')
+	console.log('🟢 New client connected')
+
+	socket.on('message', (msg) => {
+		console.log(`📨 Received: ${msg}`)
+
+		// Broadcast the message to ALL clients
+		wss.clients.forEach((client) => {
+			if (client.readyState === WebSocket.OPEN) {
+				client.send(msg)
+			}
+		})
+	})
 
 	socket.on('close', () => {
-		console.log('User disconnected')
+		console.log('🔴 Client disconnected')
 	})
 })
 
