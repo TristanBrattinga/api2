@@ -12,6 +12,7 @@
   "dependencies": {
     "@tinyhttp/app": "^2.5.2",
     "liquidjs": "^10.21.0",
+    "serve-static": "^2.2.0",
     "ws": "^8.18.1"
   },
   "devDependencies": {

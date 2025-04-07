@@ -1,12 +1,17 @@
 import { App } from '@tinyhttp/app'
 import { Liquid } from 'liquidjs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import http from 'node:http'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { WebSocketServer } from 'ws'
+import serveStatic from 'serve-static'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = new App()
+
+app.use(serveStatic(path.join(__dirname, 'public')))
 
 const engine = new Liquid({
 	root: path.join(__dirname, 'views'),
@@ -24,4 +29,15 @@ app.get('/', async (req, res) => {
 	res.send(fullPage)
 })
 
-app.listen(3000, () => console.log('Started on http://localhost:3000'))
+const server = http.createServer(app.handler.bind(app))
+const wss = new WebSocketServer({ server })
+
+wss.on('connection', (socket) => {
+	console.log('New user connected')
+
+	socket.on('close', () => {
+		console.log('User disconnected')
+	})
+})
+
+server.listen(3000, () => console.log('Started on http://localhost:3000'))
