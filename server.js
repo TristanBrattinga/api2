@@ -14,8 +14,14 @@ const engine = new Liquid({
 })
 
 app.get('/', async (req, res) => {
-	const html = await engine.renderFile('index')
-	res.send(html)
+	const pageContent = await engine.renderFile('index', { name: 'Tristan' })
+
+	const fullPage = await engine.renderFile('layout', {
+		title: 'Chat App',
+		content: pageContent
+	})
+
+	res.send(fullPage)
 })
 
 app.listen(3000, () => console.log('Started on http://localhost:3000'))
