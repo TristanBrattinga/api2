@@ -1,10 +1,10 @@
 import 'dotenv/config'
 import { App } from '@tinyhttp/app'
 import { logger } from '@tinyhttp/logger'
+import { cookieParser } from '@tinyhttp/cookie-parser'
 import { Liquid } from 'liquidjs'
 import sirv from 'sirv'
 import { fetchCoinDetails, fetchMarketData } from './utils/api.js'
-import { cookieParser } from '@tinyhttp/cookie-parser'
 
 const engine = new Liquid({ extname: '.liquid' })
 const app = new App()
@@ -82,12 +82,6 @@ app.get('/favorites', async (req, res) => {
   return res.send(renderTemplate('server/views/favorites.liquid', {
     title: 'Favorites',
   }))
-})
-
-app.get('/events', (req, res) => {
-  res.setHeader('Content-Type', 'text/event-stream')
-  res.setHeader('Cache-Control', 'no-cache')
-  res.setHeader('Connection', 'keep-alive')
 })
 
 const renderTemplate = (template, data) => {
