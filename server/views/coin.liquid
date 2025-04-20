@@ -1,0 +1,21 @@
+{% layout "server/layouts/base.liquid" %}
+
+{% block content %}
+
+<section class="container">
+    <nav>
+        <a class="back-button" href="/">Back</a>
+        <h1>{{ coin.name }} ({{ coin.symbol | upcase }})</h1>
+    </nav>
+    <img src="{{ coin.image.large }}" alt="{{ coin.name }} logo" width="100" />
+    <p>Current price: ${{ coin.market_data.current_price }}</p>
+    <p>Market cap: ${{ coin.market_data.market_cap }}</p>
+    <p>24h high: ${{ coin.market_data.high_24h }}</p>
+    <p>24h low: ${{ coin.market_data.low_24h }}</p>
+    <p>{{ coin.description.en }}</p>
+</section>
+<section>
+    <canvas id="coin-chart" width="600" height="300"></canvas>
+</section>
+
+{% endblock %}

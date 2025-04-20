@@ -1,0 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Inter, -apple-system, "system-ui", "segoe ui", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Light by default */
+body {
+    background-color: rgb(13, 20, 33);
+    color: #eee;
+    transition: background-color 0.3s, color 0.3s;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    overflow-x: auto;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+ul {
+    list-style: none;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem !important;
+
+    input {
+        height: 2rem;
+        background-color: #323546;
+        color: #646B80;
+        border: none;
+        border-radius: 999px;
+        padding: .5rem;
+    }
+}
+
+footer {
+    padding: 2rem 0 1rem 0;
+    text-align: center;
+
+    p, p>* {
+        font-size: 0.75rem;
+        color: #A1A7BB;
+
+        a {
+            text-decoration: underline;
+        }
+    }
+}
+
+.coin-symbol {
+    color: #A1A7BB;
+    text-transform: uppercase;
+}
+
+p[data-direction='up'] {
+    color: #16c784;
+}
+
+p[data-direction='down'] {
+    color: #ea3943;
+}
+
+/* TABLE STYLING*/
+table {
+    position: relative;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    background-color: rgb(13, 20, 33);
+    font-size: 0.75rem;
+
+
+    tr {
+        border-bottom: 1px solid #323546;
+        border-top: 1px solid #323546;
+    }
+
+    th {
+        text-align: end;
+
+        position: sticky;
+        padding: 11px 10px;
+    }
+
+    th:nth-child(2),
+    th:nth-child(3) {
+        text-align: start;
+    }
+
+    th:nth-child(n+4) {
+        text-align: end;
+    }
+}
+
+tbody {
+    font-size: 0.875rem;
+
+    tr {
+        cursor: pointer;
+        border-bottom: 1px solid rgb(50, 53, 70);
+
+        &:hover {
+            background-color: #222531;
+        }
+
+        td {
+            text-align: end;
+            padding: 1rem 10px;
+
+            p {
+                font-weight: 500;
+            }
+
+            a {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+
+                img {
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}
+
+.not-found {
+    font-size: 2rem;
+}
+
+.back-button {
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 2rem;
+    background-color: #222531;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background-color: #84869c;
+    }
+}
+
+.favorite-button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    svg {
+        width: 1rem;
+        height: 1rem;
+
+        &>path {
+            fill: #eee;
+        }
+    }
+
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    fill: #888;
+}
+
+.clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.clear-btn svg {
+    fill: #888;
+}
+
+input[type="search"]:not(:placeholder-shown) + .clear-btn {
+    display: block;
+}
+
+input[type="search"]:placeholder-shown + .clear-btn {
+    display: none;
+}
+
+/* NAVBAR STYLING */
+header {
+    input[type='search'] {
+        color: #eee;
+        font-size: 0.875rem;
+        font-weight: 500;
+        width: 20rem;
+        height: 2rem;
+        padding: .5rem 0 .5rem 2rem;
+        background-color: #222531;
+        border: 1px solid transparent;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: border 0.3s ease;
+
+        &:hover {
+            border: 1px solid #84869c;
+        }
+
+        &::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+            appearance: none;
+            display: none;
+        }
+
+        &::-webkit-search-decoration {
+            display: none;
+        }
+    }
+
+    #currency-form {
+
+        p, label {
+            font-size: 0.75rem;
+        }
+
+        select {
+            color: #eee;
+            font-size: 0.875rem;
+            font-weight: 500;
+            height: 2rem;
+            padding: 0 .5rem;
+            background-color: #222531;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: #84869c;
+            }
+        }
+    }
+}
+
+
+
+/* PAGINATION STYLING */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+
+    &>* {
+        width: calc(1/3 * 100%);
+    }
+
+    p, label {
+        font-size: 0.75rem;
+    }
+
+    .limit-form {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    select {
+        color: #eee;
+        font-size: 0.875rem;
+        font-weight: 500;
+        height: 2rem;
+        padding: 0 .5rem;
+        background-color: #222531;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #84869c;
+        }
+    }
+}
+
+.pagination {
+    ul {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+
+        li a {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background-color: #222531;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+
+            &:hover, &.active {
+                background-color: #84869c;
+                transform: scale(1.1);
+            }
+
+            &.disabled {
+                pointer-events: none;
+                cursor: not-allowed;
+                background-color: #222531;
+                opacity: 0.25;
+            }
+        }
+    }
+}
