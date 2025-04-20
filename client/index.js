@@ -1,6 +1,13 @@
 import './limitSelect.js'
 import './index.css'
 
+const source = new EventSource('/events')
+
+source.addEventListener('time', (event) => {
+	const display = document.querySelector('#time-display')
+	if (display) display.textContent = `Server Time: ${event.data}`
+})
+
 document.addEventListener('DOMContentLoaded', () => {
 	const currencySelect = document.querySelector('.currency-select')
 

@@ -84,6 +84,27 @@ app.get('/favorites', async (req, res) => {
   }))
 })
 
+app.get('/events', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream')
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Connection', 'keep-alive')
+
+  const sendTime = () => {
+    const now = new Date().toLocaleTimeString()
+    res.write(`event: time\n`)
+    res.write(`data: ${now}\n\n`)
+  }
+
+  // Initial send
+  sendTime()
+
+  // Then every 5 seconds
+  const interval = setInterval(sendTime, 5000)
+
+  // Clean up if client disconnects
+  req.on('close', () => clearInterval(interval))
+})
+
 const renderTemplate = (template, data) => {
   const templateData = {
     title: data.title || 'Coinly',
