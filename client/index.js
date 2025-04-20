@@ -1,5 +1,4 @@
 import './limitSelect.js'
-import './index.css'
 
 const source = new EventSource('/events')
 
