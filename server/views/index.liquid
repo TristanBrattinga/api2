@@ -3,7 +3,12 @@
 {% block content %}
 
 <section class="container">
-    <p id="time-display" style="color: #eee; font-size: 0.875rem;"></p>
+    <article id="indicator">
+        <div class="progress-bar">
+            <div class="progress" id="progressFill"></div>
+        </div>
+        <p id="indicatorText">Next Price Update in 60s</p>
+    </article>
     {% if coins.size > 0 %}
         <table>
             <thead>
@@ -48,12 +53,7 @@
             <tbody>
             {% for coin in coins %}
                 <tr
-                        data-market_cap_rank="{{ coin.market_cap_rank }}"
-                        data-current_price="{{ coin.current_price }}"
-                        data-price_change_percentage_1h_in_currency="{{ coin.price_change_percentage_1h_in_currency }}"
-                        data-price_change_percentage_24h="{{ coin.price_change_percentage_24h }}"
-                        data-price_change_percentage_7d_in_currency="{{ coin.price_change_percentage_7d_in_currency }}"
-                        data-market_cap="{{ coin.market_cap }}"
+                        data-coin-id="{{ coin.id }}"
                 >
                     <td>
                         <button aria-label="Favorite coin" class="favorite-button">

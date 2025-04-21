@@ -74,6 +74,32 @@ p[data-direction='down'] {
     color: #ea3943;
 }
 
+.progress-bar {
+    height: .25rem;
+    width: 100%;
+    background-color: #222531;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+.progress {
+    height: 100%;
+    width: 0%;
+    background-color: #eee;
+    transition: width 1s linear;
+}
+
+#indicator {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: 25rem;
+
+    p {
+        font-size: 0.875rem;
+        text-wrap: nowrap;
+    }
+}
+
 /* TABLE STYLING*/
 table {
     position: relative;
@@ -125,6 +151,10 @@ tbody {
         td {
             text-align: end;
             padding: 1rem 10px;
+
+            &:nth-child(2) {
+                text-align: start;
+            }
 
             p {
                 font-weight: 500;

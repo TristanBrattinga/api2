@@ -1,8 +1,3 @@
-const currencySymbols = {
-	usd: '$',
-	eur: '€',
-}
-
 export const formatCurrency = (value, currency) => {
 	if (typeof value !== 'number') return value
 

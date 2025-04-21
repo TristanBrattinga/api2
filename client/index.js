@@ -1,13 +1,54 @@
 import './limitSelect.js'
 
-const source = new EventSource('/events')
+const prices = new EventSource('/events')
+let lastUpdate = Date.now()
 
-source.addEventListener('time', (event) => {
-	const display = document.querySelector('#time-display')
-	if (display) display.textContent = `Server Time: ${event.data}`
+// Track last notified prices
+const lastNotifiedPrices = {}
+
+const maybeNotify = (coin) => {
+	if (Notification.permission !== 'granted') return
+
+	const previous = lastNotifiedPrices[coin.id]
+	const current = parseFloat(coin.current_price)
+
+	// Notify if the price changed by more than 2%
+	if (previous && Math.abs(current - previous) / previous > 0.02) {
+		new Notification(`${coin.name} price alert!`, {
+			body: `${coin.name} is now ${coin.formatted_price}`,
+			icon: `${coin.image}`
+		})
+	}
+
+	lastNotifiedPrices[coin.id] = current
+}
+
+prices.addEventListener('prices', e => {
+	const coins = JSON.parse(e.data)
+	lastUpdate = Date.now()
+
+	console.log('Updated prices:', coins)
+
+	coins.forEach(coin => {
+		const el = document.querySelector(`[data-coin-id="${coin.id}"]`)
+		console.log(el)
+		if (el) {
+			el.querySelector(`#price-${coin.id}`).textContent = coin.formatted_price
+		}
+		maybeNotify(coin)
+	})
 })
 
+const askNotificationPermission = () => {
+	if (Notification.permission === 'default') {
+		Notification.requestPermission().then(permission => {
+			console.log('Notification permission:', permission)
+		})
+	}
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+	askNotificationPermission()
 	const currencySelect = document.querySelector('.currency-select')
 
 	currencySelect.addEventListener('change', (e) => {
@@ -18,4 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		window.location.reload()
 	})
+
+	const fill = document.querySelector('#progressFill')
+	const timerText = document.querySelector('#indicatorText')
+
+	function updateProgressBar() {
+		const now = Date.now()
+		const elapsed = (now - lastUpdate) / 1000 // in seconds
+		const remaining = Math.max(60 - elapsed, 0)
+		const percentage = Math.min((elapsed / 60) * 100, 100)
+
+		fill.style.width = `${percentage}%`
+		timerText.textContent = `Next Price Update in ${Math.ceil(remaining)}s`
+	}
+
+	// Update every 100ms for smoothness
+	setInterval(updateProgressBar, 100)
 })
