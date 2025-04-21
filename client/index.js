@@ -1,4 +1,5 @@
-import './limitSelect.js'
+import './detail.js'
+import './localStorage.js'
 
 const prices = new EventSource('/events')
 let lastUpdate = Date.now()
@@ -12,7 +13,6 @@ const maybeNotify = (coin) => {
 	const previous = lastNotifiedPrices[coin.id]
 	const current = parseFloat(coin.current_price)
 
-	// Notify if the price changed by more than 2%
 	if (previous && Math.abs(current - previous) / previous > 0.02) {
 		new Notification(`${coin.name} price alert!`, {
 			body: `${coin.name} is now ${coin.formatted_price}`,
@@ -27,11 +27,8 @@ prices.addEventListener('prices', e => {
 	const coins = JSON.parse(e.data)
 	lastUpdate = Date.now()
 
-	console.log('Updated prices:', coins)
-
 	coins.forEach(coin => {
 		const el = document.querySelector(`[data-coin-id="${coin.id}"]`)
-		console.log(el)
 		if (el) {
 			el.querySelector(`#price-${coin.id}`).textContent = coin.formatted_price
 		}
@@ -50,29 +47,41 @@ const askNotificationPermission = () => {
 document.addEventListener('DOMContentLoaded', () => {
 	askNotificationPermission()
 	const currencySelect = document.querySelector('.currency-select')
+	const limitSelect = document.querySelector('.limit-select')
+	const limitForm = document.querySelector('.limit-form')
 
-	currencySelect.addEventListener('change', (e) => {
-		const selectedCurrency = e.target.value
+	if (limitSelect && limitForm) {
+		limitSelect.addEventListener('change', () => {
+			limitForm.submit()
+		})
+	}
 
-		// Save currency in cookie (30 days)
-		document.cookie = `currency=${selectedCurrency}; path=/; max-age=${30 * 24 * 60 * 60}`
+	if (currencySelect) {
+		currencySelect.addEventListener('change', (e) => {
+			const selectedCurrency = e.target.value
 
-		window.location.reload()
-	})
+			// Save currency in cookie (30 days)
+			document.cookie = `currency=${selectedCurrency}; path=/; max-age=${30 * 24 * 60 * 60}`
+
+			window.location.reload()
+		})
+	}
 
 	const fill = document.querySelector('#progressFill')
 	const timerText = document.querySelector('#indicatorText')
 
-	function updateProgressBar() {
-		const now = Date.now()
-		const elapsed = (now - lastUpdate) / 1000 // in seconds
-		const remaining = Math.max(60 - elapsed, 0)
-		const percentage = Math.min((elapsed / 60) * 100, 100)
+	if (fill && timerText) {
+		function updateProgressBar() {
+			const now = Date.now()
+			const elapsed = (now - lastUpdate) / 1000 // in seconds
+			const remaining = Math.max(60 - elapsed, 0)
+			const percentage = Math.min((elapsed / 60) * 100, 100)
 
-		fill.style.width = `${percentage}%`
-		timerText.textContent = `Next Price Update in ${Math.ceil(remaining)}s`
+			fill.style.width = `${percentage}%`
+			timerText.textContent = `Next Price Update in ${Math.ceil(remaining)}s`
+		}
+
+		// Update every 100ms for smoothness
+		setInterval(updateProgressBar, 100)
 	}
-
-	// Update every 100ms for smoothness
-	setInterval(updateProgressBar, 100)
 })

@@ -86,6 +86,40 @@ app.get('/favorites', async (req, res) => {
 	}))
 })
 
+// async function getBody(req) {
+// 	const chunks = []
+// 	for await (const chunk of req) {
+// 		chunks.push(chunk)
+// 	}
+// 	const body = Buffer.concat(chunks).toString()
+// 	return JSON.parse(body)
+// }
+
+// app.post('/geo', async (req, res) => {
+// 	const { latitude, longitude } = await getBody(req)
+//
+// 	const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${process.env.OPENCAGE_API_KEY}`)
+//
+// 	const data = await response.json()
+//
+// 	console.log(data)
+//
+// 	const countryCode = data.results[0]?.components?.country_code?.toUpperCase()
+//
+// 	const currencyMap = {
+// 		AU: 'AUD',
+// 		NL: 'EUR',
+// 		US: 'USD',
+// 		// Add more as needed
+// 	}
+//
+// 	const currency = currencyMap[countryCode] || 'USD'
+//
+// 	// Set cookie
+// 	res.setHeader('Set-Cookie', `currency=${currency}; Path=/; Max-Age=${30 * 24 * 60 * 60}`)
+// 	res.end()
+// })
+
 app.get('/events', (req, res) => {
 	res.setHeader('Content-Type', 'text/event-stream')
 	res.setHeader('Cache-Control', 'no-cache')
