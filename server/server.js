@@ -2,41 +2,55 @@ import 'dotenv/config'
 import { App } from '@tinyhttp/app'
 import { logger } from '@tinyhttp/logger'
 import { cookieParser } from '@tinyhttp/cookie-parser'
+import { Router } from '@tinyhttp/router'
 import { Liquid } from 'liquidjs'
 import sirv from 'sirv'
-import { fetchCoinDetails, fetchCoinHistory, fetchMarketData } from './utils/api.js'
+import { fetchCoinDetails, fetchCoinList, fetchMarketData } from './utils/api.js'
+import { getPaginationRange } from './utils/pagination.js'
+import bodyParser from 'body-parser'
 
 const engine = new Liquid({ extname: '.liquid' })
 const app = new App()
+const router = new Router()
 const limitOptions = [25, 50, 100, 200, 250]
 
 const clients = []
 
 app
 	.use(logger())
+	.use(bodyParser.urlencoded({ extended: true }))
+	.use(bodyParser.json())
 	.use(cookieParser())
 	.use('/', sirv('dist'))
 	.listen(3000, () => console.log('Server available on http://localhost:3000'))
 
-const getPagination = (page, totalItems, limit) => {
-	const totalPages = Math.ceil(totalItems / limit);
-	const startItem = (page - 1) * limit + 1;
-	const endItem = Math.min(page * limit, totalItems);
-
-	return { totalPages, startItem, endItem };
-};
-
 app.get('/', async (req, res) => {
 	const query = req.query.q?.toLowerCase() || ''
 	const page = parseInt(req.query.page) || 1
-	const limit = parseInt(req.query.limit) || 50
+	const limit = parseInt(req.query.limit) || 100
 	const currency = req.query.currency || req.cookies.currency || 'usd'
+	const sort = req.query.sort || 'market_cap_desc'
 
 	if (!req.cookies.currency) {
-		res.setHeader('Set-Cookie', `currency=${currency}; Path=/; Max-Age=${30 * 24 * 60 * 60}`)
+		res.setHeader('Set-Cookie', `currency=${currency} Path=/ Max-Age=${30 * 24 * 60 * 60}`)
 	}
 
-	let coins = await fetchMarketData(currency)
+	// Build API query
+	const queryParams = new URLSearchParams({
+		vs_currency: currency,
+		order: sort,
+		per_page: limit,
+		page,
+		price_change_percentage: '1h,24h,7d'
+	})
+
+	const coinList = await fetchCoinList()
+	const totalItems = coinList.length
+	const totalPages = Math.ceil(totalItems / limit)
+	const startItem = (page - 1) * limit + 1
+	const endItem = Math.min(page * limit, totalItems)
+
+	let coins = await fetchMarketData(queryParams.toString())
 
 	if (query) {
 		coins = coins.filter((coin) =>
@@ -45,25 +59,33 @@ app.get('/', async (req, res) => {
 		)
 	}
 
-	const totalItems = coins.length
+	const paginationRange = getPaginationRange(page, totalPages)
 
-	const { totalPages, startItem, endItem } = getPagination(page, totalItems, limit);
-
-	const paginatedCoins = coins.slice(startItem -1, endItem)
+	let favorites = []
+	if (req.cookies.favorites) {
+		try {
+			favorites = JSON.parse(req.cookies.favorites)
+		} catch {
+			favorites = []
+		}
+	}
 
 	return res.send(renderTemplate('server/views/index.liquid', {
-		coins: paginatedCoins,
+		coins,
 		currentPage: page,
 		prevPage: page - 1,
 		nextPage: page + 1,
-		totalPages,
+		paginationRange,
 		limit,
 		query,
 		startItem,
 		endItem,
 		totalItems,
+		totalPages,
 		limits: limitOptions,
-		currency
+		currency,
+		sort,
+		favorites,
 	}))
 })
 
@@ -80,45 +102,108 @@ app.get('/coin/:id/', async (req, res) => {
 	}))
 })
 
-app.get('/api/coin/:id/history', async (req, res) => {
-	const id = req.params.id;
-	const currency = req.query.currency || req.cookies.currency || 'usd';
-
-	const now = Math.floor(Date.now() / 1000);
-	const from = now - 7 * 24 * 60 * 60; // 7 days ago
-	const to = now;
-
-	try {
-		const history = await fetchCoinHistory(id, currency, from, to);
-		const chartData = {
-			labels: history.prices.map(price => new Date(price[0]).toLocaleDateString()),
-			prices: history.prices.map(price => price[1]),
-		};
-
-		res.json(chartData);
-	} catch (error) {
-		console.error(error);
-		res.status(500).json({ error: 'Failed to fetch chart data' });
-	}
-});
-
-app.get('/convert', async (req, res) => {
-	const id = req.query.coin
-	const currency = req.query.currency || 'usd'
-
-	try {
-		const coin = await fetchCoinDetails(id, currency)
-		const price = coin.market_data?.current_price?.[currency]
-		res.json({ price })
-	} catch {
-		res.status(500).json({ error: 'Conversion failed' })
-	}
-})
+// app.get('/api/coin/:id/history', async (req, res) => {
+// 	const id = req.params.id
+// 	const currency = req.query.currency || req.cookies.currency || 'usd'
+//
+// 	const now = Math.floor(Date.now() / 1000)
+// 	const from = now - 7 * 24 * 60 * 60 // 7 days ago
+// 	const to = now
+//
+// 	try {
+// 		const history = await fetchCoinHistory(id, currency, from, to)
+// 		const chartData = {
+// 			labels: history.prices.map(price => new Date(price[0]).toLocaleDateString()),
+// 			prices: history.prices.map(price => price[1]),
+// 		}
+//
+// 		res.json(chartData)
+// 	} catch (error) {
+// 		console.error(error)
+// 		res.status(500).json({ error: 'Failed to fetch chart data' })
+// 	}
+// })
 
 app.get('/favorites', async (req, res) => {
-	return res.send(renderTemplate('server/views/favorites.liquid', {
-		title: 'Favorites',
+	const query = req.query.q?.toLowerCase() || ''
+	const page = parseInt(req.query.page) || 1
+	const limit = parseInt(req.query.limit) || 100
+	const currency = req.query.currency || req.cookies.currency || 'usd'
+	const sort = req.query.sort || 'market_cap_desc'
+	const favorites = req.cookies.favorites ? JSON.parse(req.cookies.favorites) : []
+
+	if (favorites.length === 0) {
+		// Render the template with empty data
+		return res.send(renderTemplate('server/views/favorite.liquid', {
+			coins: [],
+			currentPage: page,
+			prevPage: page - 1,
+			nextPage: page + 1,
+			startItem: 0,
+			endItem: 0,
+			totalItems: 0,
+			totalPages: 1,
+			limits: limitOptions,
+			limit,
+			query,
+			currency,
+			sort,
+			favorites,
+		}))
+	}
+
+	const queryParams = new URLSearchParams({
+		vs_currency: currency,
+		ids: favorites.join(','),
+		order: sort,
+		per_page: limit,
+		page,
+		price_change_percentage: '1h,24h,7d'
+	})
+
+	console.log(favorites)
+
+	// Retrieve the favorite coins from the CoinGecko API
+	const favoriteCoins = await fetchMarketData(queryParams.toString())
+
+	console.log(favoriteCoins)
+
+	// Render the template with the favorite coins
+	return res.send(renderTemplate('server/views/favorite.liquid', {
+		coins: favoriteCoins,
+		currentPage: page, // Set this to 1 or wherever you want to start
+		prevPage: page - 1,
+		nextPage: page + 1,
+		startItem: 1,
+		endItem: 2,
+		totalItems: favoriteCoins.length,
+		totalPages: 1,
+		limits: limitOptions,
+		limit,
+		query,
+		currency,
+		sort,
+		favorites,
 	}))
+})
+
+app.post('/favorite', (req, res) => {
+	const { coinId } = req.body
+	let favorites    = req.cookies.favorites ? JSON.parse(req.cookies.favorites) : []
+
+	if (favorites.includes(coinId)) {
+		favorites = favorites.filter(id => id !== coinId)
+	} else {
+		favorites.push(coinId)
+	}
+
+	res.cookie('favorites', JSON.stringify(favorites), {
+		path: '/',
+		maxAge: 30 * 24 * 60 * 60 * 1000,
+		httpOnly: false
+	})
+
+	res.redirect(req.get('Referer') || '/')
 })
 
 app.get('/events', (req, res) => {
@@ -127,33 +212,49 @@ app.get('/events', (req, res) => {
 	res.setHeader('Connection', 'keep-alive')
 	res.flushHeaders()
 
-	clients.push(res)
+	const currency = req.query.currency || 'usd'
+	const sort = req.query.sort || 'market_cap_desc'
+	const limit = parseInt(req.query.limit) || 100
+	const page = parseInt(req.query.page) || 1
+
+	const clientQueryParams = new URLSearchParams({
+		vs_currency: currency,
+		order: sort,
+		per_page: limit,
+		page,
+		price_change_percentage: '1h,24h,7d'
+	})
+
+	const client = {
+		id: Date.now(),
+		res,
+		params: clientQueryParams,
+	}
+
+	clients.push(client)
 
 	req.on('close', () => {
-		const i = clients.indexOf(res)
-		if (i !== -1) clients.splice(i, 1)
+		clients.splice(clients.indexOf(client), 1)
 	})
 })
 
 setInterval(async () => {
-	try {
-		const currency = 'usd'
-		const data = await fetchMarketData(currency)
-		const payload = JSON.stringify(data)
+	for (const client of clients) {
+		try {
+			const data = await fetchMarketData(client.params)
+			const payload = JSON.stringify(data)
 
-		for (const client of clients) {
-			client.write(`event: prices\n`)
-			client.write(`data: ${payload}\n\n`)
+			client.res.write(`event: prices\n`)
+			client.res.write(`data: ${payload}\n\n`)
+		} catch (error) {
+			console.error(`Error fetching data for client ${client.id}:`, error)
 		}
-	} catch (error) {
-		console.error('Error fetching market data:', error)
 	}
 }, 60000)
 
 const renderTemplate = (template, data) => {
 	const templateData = {
 		title: data.title || 'Coinly',
-		NODE_ENV: process.env.NODE_ENV || 'production',
 		...data
 	}
 

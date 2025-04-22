@@ -1,0 +1,14 @@
+{% layout "server/layouts/base.liquid" %}
+
+{% block content %}
+
+<section class="container">
+    {% render 'server/components/currency-selector/currency-selector.liquid', currency: currency %}
+    {% if coins.size > 0 %}
+        {% render 'server/components/table/table.liquid', coins: coins, favorites: favorites %}
+    {% else %}
+        <p>No favorites added yet</p>
+    {% endif %}
+</section>
+
+{% endblock %}

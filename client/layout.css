@@ -1,16 +1,31 @@
-header {
-  border-bottom: 1px solid black;
-  padding: 1rem 0;
+.logo-mobile {
+  display: none;
+}
 
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.logo-desktop {
+  display: block;
+}
 
-    ul {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
+@media (max-width: 768px) {
+  .logo-mobile {
+    display: block;
+  }
+
+  .logo-desktop {
+    display: none;
+  }
+}
+
+footer {
+  padding: 2rem 0 1rem 0;
+  text-align: center;
+
+  p, p>* {
+    font-size: 0.75rem;
+    color: #A1A7BB;
+
+    a {
+      text-decoration: underline;
     }
   }
 }

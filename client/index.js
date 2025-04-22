@@ -1,5 +1,4 @@
 import './detail.js'
-import './localStorage.js'
 import './index.css'
 
 const prices = new EventSource('/events')
@@ -81,4 +80,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		setInterval(updateProgressBar, 100)
 	}
+
+	const btn = document.querySelector('.scroll-to-top');
+
+	window.addEventListener('scroll', () => {
+		if (window.scrollY > 300) {
+			btn.classList.add('show');
+		} else {
+			btn.classList.remove('show');
+		}
+	});
+
+	btn.addEventListener('click', () => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	});
 })

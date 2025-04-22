@@ -1,0 +1,39 @@
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    fill: #888;
+}
+
+.clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.clear-btn svg {
+    fill: #888;
+}
+
+input[type="search"]:not(:placeholder-shown) + .clear-btn {
+    display: block;
+}
+
+input[type="search"]:placeholder-shown + .clear-btn {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    #search-form {
+        display: none;
+    }
+}

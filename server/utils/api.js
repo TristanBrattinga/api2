@@ -1,8 +1,30 @@
 import { formatCurrency, formatPercentage, formatWebsite } from './format.js'
 
-export const fetchMarketData = async (currency) => {
+export const fetchCoinList = async () => {
 	try {
-		const response = await fetch(`${process.env.COINGECKO_API_BASE_URL}/coins/markets?vs_currency=${currency}&price_change_percentage=1h%2C24h%2C7d&per_page=250`, {
+		const response = await fetch(`${process.env.COINGECKO_API_BASE_URL}/coins/list`, {
+			method:  'GET',
+			headers: {
+				accept: 'application/json',
+				'x-cg-demo-api-key': process.env.COINGECKO_API_KEY
+			}
+		})
+
+		if (!response.ok) {
+			throw new Error('Failed to fetch coin list')
+		}
+
+		return await response.json()
+
+	} catch (error) {
+		console.error('Error fetching coin list:', error)
+		throw error
+	}
+}
+
+export const fetchMarketData = async (query) => {
+	try {
+		const response = await fetch(`${process.env.COINGECKO_API_BASE_URL}/coins/markets?${query}`, {
 			method:  'GET',
 			headers: {
 				accept: 'application/json',
@@ -14,15 +36,15 @@ export const fetchMarketData = async (currency) => {
 			throw new Error('Failed to fetch market data')
 		}
 
-		let coins = await response.json()
+		const coins = await response.json()
 
 		return coins.map((coin) => ({
 			...coin,
 			percentage_1h: formatPercentage(coin.price_change_percentage_1h_in_currency),
 			percentage_24h: formatPercentage(coin.price_change_percentage_24h),
 			percentage_7d: formatPercentage(coin.price_change_percentage_7d_in_currency),
-			formatted_market_cap: formatCurrency(coin.market_cap, currency),
-			formatted_price: formatCurrency(coin.current_price, currency),
+			formatted_market_cap: formatCurrency(coin.market_cap, coin.vs_currency),
+			formatted_price: formatCurrency(coin.current_price, coin.vs_currency),
 		}))
 	} catch (error) {
 		console.error('Error fetching market data:', error)

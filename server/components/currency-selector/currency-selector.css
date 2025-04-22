@@ -1,0 +1,22 @@
+#currency-form {
+    p, label {
+        font-size: 0.75rem;
+    }
+
+    select {
+        color: #eee;
+        font-size: 0.875rem;
+        font-weight: 500;
+        height: 2rem;
+        padding: 0 .5rem;
+        background-color: #222531;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #84869c;
+        }
+    }
+}
