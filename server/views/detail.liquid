@@ -18,12 +18,42 @@
             <p class="coin-symbol">{{ coin.symbol }}</p>
             <span class="coin-rank">#{{ coin.market_cap_rank }}</span>
         </div>
+        <p class="coin-price">{{ coin.market_data.current_price.usd }}</p>
         <ul>
-            <li></li>
+            <li>
+                <p>Market Cap</p>
+                <p>{{ coin.market_data.market_cap.usd }}</p>
+            </li>
+            <li>
+                <p>Fully Diluted Valuation</p>
+                <p>{{ coin.market_data.fully_diluted_valuation.usd }}</p>
+            </li>
+            <li>
+                <p>24 Hour Trading Vol</p>
+            </li>
+            <li>
+                <p>Circulating Supply</p>
+                <p>{{ coin.market_data.circulating_supply }}</p>
+            </li>
+            <li>
+                <p>Total Supply</p>
+                <p>{{ coin.market_data.total_supply }}</p>
+            </li>
+            <li>
+                <p>Max Supply</p>
+                {% if coin.market_data.max_supply == null %}
+                    <span>
+                        {% include "server/icons/infinite.svg.liquid" %}
+                    </span>
+                {% else %}
+                    <p>{{ coin.market_data.max_supply }}</p>
+                {% endif %}
+            </li>
         </ul>
+        <h3>Info</h3>
     </aside>
     <section>
-
+        <p>Test</p>
     </section>
 </section>
 

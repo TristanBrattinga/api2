@@ -8,7 +8,6 @@ import { fetchCoinDetails, fetchMarketData } from './utils/api.js'
 
 const engine = new Liquid({ extname: '.liquid' })
 const app = new App()
-const isDev = process.env.NODE_ENV === 'development'
 const limitOptions = [25, 50, 100, 200, 250]
 
 const clients = []
@@ -16,7 +15,7 @@ const clients = []
 app
 	.use(logger())
 	.use(cookieParser())
-	.use('/', sirv(isDev ? 'client' : 'dist'))
+	.use('/', sirv('dist'))
 	.listen(3000, () => console.log('Server available on http://localhost:3000'))
 
 const getPagination = (page, totalItems, limit) => {
@@ -74,7 +73,9 @@ app.get('/coin/:id/', async (req, res) => {
 
 	const coin = await fetchCoinDetails(id, currency)
 
-	return res.send(renderTemplate('server/views/coin.liquid', {
+	console.log(coin)
+
+	return res.send(renderTemplate('server/views/detail.liquid', {
 		coin,
 		currency
 	}))
@@ -85,40 +86,6 @@ app.get('/favorites', async (req, res) => {
 		title: 'Favorites',
 	}))
 })
-
-// async function getBody(req) {
-// 	const chunks = []
-// 	for await (const chunk of req) {
-// 		chunks.push(chunk)
-// 	}
-// 	const body = Buffer.concat(chunks).toString()
-// 	return JSON.parse(body)
-// }
-
-// app.post('/geo', async (req, res) => {
-// 	const { latitude, longitude } = await getBody(req)
-//
-// 	const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${process.env.OPENCAGE_API_KEY}`)
-//
-// 	const data = await response.json()
-//
-// 	console.log(data)
-//
-// 	const countryCode = data.results[0]?.components?.country_code?.toUpperCase()
-//
-// 	const currencyMap = {
-// 		AU: 'AUD',
-// 		NL: 'EUR',
-// 		US: 'USD',
-// 		// Add more as needed
-// 	}
-//
-// 	const currency = currencyMap[countryCode] || 'USD'
-//
-// 	// Set cookie
-// 	res.setHeader('Set-Cookie', `currency=${currency}; Path=/; Max-Age=${30 * 24 * 60 * 60}`)
-// 	res.end()
-// })
 
 app.get('/events', (req, res) => {
 	res.setHeader('Content-Type', 'text/event-stream')
@@ -140,7 +107,6 @@ setInterval(async () => {
 		const data = await fetchMarketData(currency)
 		const payload = JSON.stringify(data)
 
-		// Send data to all connected clients
 		for (const client of clients) {
 			client.write(`event: prices\n`)
 			client.write(`data: ${payload}\n\n`)
