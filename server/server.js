@@ -73,8 +73,6 @@ app.get('/coin/:id/', async (req, res) => {
 
 	const coin = await fetchCoinDetails(id, currency)
 
-	console.log(coin)
-
 	return res.send(renderTemplate('server/views/detail.liquid', {
 		coin,
 		currency
