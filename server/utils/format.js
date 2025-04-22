@@ -26,3 +26,9 @@ export const formatPercentage = (value) => {
 		direction,
 	}
 }
+
+export const formatWebsite = (link) => {
+	if (!link) return ''
+
+	return link.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]
+}

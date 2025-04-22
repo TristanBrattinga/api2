@@ -182,22 +182,6 @@ tbody {
     font-size: 2rem;
 }
 
-.back-button {
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 5rem;
-    height: 2rem;
-    background-color: #222531;
-    border-radius: 0.5rem;
-    transition: all 0.3s ease-in-out;
-
-    &:hover {
-        background-color: #84869c;
-    }
-}
-
 .favorite-button {
     border: none;
     outline: none;

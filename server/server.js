@@ -4,7 +4,7 @@ import { logger } from '@tinyhttp/logger'
 import { cookieParser } from '@tinyhttp/cookie-parser'
 import { Liquid } from 'liquidjs'
 import sirv from 'sirv'
-import { fetchCoinDetails, fetchMarketData } from './utils/api.js'
+import { fetchCoinDetails, fetchCoinHistory, fetchMarketData } from './utils/api.js'
 
 const engine = new Liquid({ extname: '.liquid' })
 const app = new App()
@@ -75,8 +75,44 @@ app.get('/coin/:id/', async (req, res) => {
 
 	return res.send(renderTemplate('server/views/detail.liquid', {
 		coin,
-		currency
+		currency,
+		availableCurrencies: ['usd', 'eur']
 	}))
+})
+
+app.get('/api/coin/:id/history', async (req, res) => {
+	const id = req.params.id;
+	const currency = req.query.currency || req.cookies.currency || 'usd';
+
+	const now = Math.floor(Date.now() / 1000);
+	const from = now - 7 * 24 * 60 * 60; // 7 days ago
+	const to = now;
+
+	try {
+		const history = await fetchCoinHistory(id, currency, from, to);
+		const chartData = {
+			labels: history.prices.map(price => new Date(price[0]).toLocaleDateString()),
+			prices: history.prices.map(price => price[1]),
+		};
+
+		res.json(chartData);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Failed to fetch chart data' });
+	}
+});
+
+app.get('/convert', async (req, res) => {
+	const id = req.query.coin
+	const currency = req.query.currency || 'usd'
+
+	try {
+		const coin = await fetchCoinDetails(id, currency)
+		const price = coin.market_data?.current_price?.[currency]
+		res.json({ price })
+	} catch {
+		res.status(500).json({ error: 'Conversion failed' })
+	}
 })
 
 app.get('/favorites', async (req, res) => {

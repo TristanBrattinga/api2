@@ -13,7 +13,29 @@
             justify-content: space-between;
             margin-bottom: 1rem;
 
-            button.share-button {
+            .back-button {
+                font-size: 0.875rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 5rem;
+                height: 2rem;
+                background-color: #222531;
+                border-radius: 0.5rem;
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    background-color: #84869c;
+                }
+            }
+
+            ul {
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+            }
+
+            button.share-button, button.favorite-button {
                 font-size: 0.875rem;
                 display: flex;
                 align-items: center;
@@ -41,20 +63,20 @@
             gap: .5rem;
 
             .coin-name {
-                font-size: 1rem;
+                font-size: 1.25rem;
                 font-weight: normal;
             }
 
             .coin-rank {
-                font-size: .875rem;
+                font-size: .75rem;
                 background-color: #222531;
-                padding: .25rem;
+                padding: .25rem .5rem;
                 border-radius: 0.5rem;
                 transition: all 0.2s ease-in-out;
+                cursor: default;
 
-                &:hover, &.active {
+                &:hover {
                     background-color: #84869c;
-                    transform: scale(1.1);
                 }
             }
         }
@@ -66,17 +88,43 @@
             margin: 1rem 0;
         }
 
-        ul li {
+        .coin-market-data li {
             display: flex;
             justify-content: space-between;
-            padding: .5rem 0;
+            align-items: center;
+            padding: .75rem 0;
             border-bottom: 1px solid #323546;
             font-size: 0.875rem;
         }
 
+        .coin-info-data li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: .5rem 0;
+            border-bottom: 1px solid #323546;
+            font-size: 0.875rem;
+
+            .button {
+                font-size: 0.875rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: none;
+                padding: .25rem .5rem;
+                background-color: #222531;
+                border-radius: 0.5rem;
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    background-color: #84869c;
+                }
+            }
+        }
+
         h3 {
             font-size: 1.5rem;
-            margin: .5rem 0;
+            margin: 1rem 0 .5rem 0;
         }
     }
 
@@ -85,5 +133,14 @@
         padding: 1rem;
         border: 1px solid #323546;
         border-radius: 0.5rem;
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 1rem 0 .5rem 0;
+        }
+
+        p {
+            font-size: 0.875rem;
+        }
     }
 }

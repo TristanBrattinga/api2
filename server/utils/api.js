@@ -1,4 +1,4 @@
-import { formatCurrency, formatPercentage } from './format.js'
+import { formatCurrency, formatPercentage, formatWebsite } from './format.js'
 
 export const fetchMarketData = async (currency) => {
 	try {
@@ -44,16 +44,23 @@ export const fetchCoinDetails = async (id, currency) => {
 			throw new Error('Coin not found...')
 		}
 
-		return await response.json()
+		const coin = await response.json()
+
+		return {
+			...coin,
+			formatted_market_cap: formatCurrency(coin.market_data.market_cap?.[currency], currency),
+			formatted_price: formatCurrency(coin.market_data.current_price?.[currency], currency),
+			formatted_website: formatWebsite(coin.links?.homepage[0])
+		}
 	} catch (error) {
 		console.error(`Error fetching details for coin ${id}:`, error)
 		throw error
 	}
 }
 
-export const fetchLatestPrices = async (ids) => {
+export const fetchCoinHistory = async (id, currency, from, to) => {
 	try {
-		const response = await fetch(`${process.env.COINGECKO_API_BASE_URL}/simple/price?ids=${ids}&vs_currencies=usd`, {
+		const response = await fetch(`${process.env.COINGECKO_API_BASE_URL}/coins/${id}/market_chart/range?vs_currency=${currency}&from=${from}&to=${to}';`, {
 			method:  'GET',
 			headers: {
 				accept: 'application/json',
