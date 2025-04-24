@@ -4,7 +4,6 @@ import './index.css'
 const prices = new EventSource('/events')
 let lastUpdate = Date.now()
 
-// Track last notified prices
 const lastNotifiedPrices = {}
 
 const maybeNotify = (coin) => {
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (fill && timerText) {
 		function updateProgressBar() {
 			const now = Date.now()
-			const elapsed = (now - lastUpdate) / 1000 // in seconds
+			const elapsed = (now - lastUpdate) / 1000
 			const remaining = Math.max(60 - elapsed, 0)
 			const percentage = Math.min((elapsed / 60) * 100, 100)
 
