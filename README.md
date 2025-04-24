@@ -58,7 +58,7 @@ kamercode zich bij aan kunnen sluiten.
 Ik had geen idee wat SSE was, hoe het precies werkt en hoe het verschilt t.o.v. WebSockets. Voordat ik hiermee aan 
 de slag kon moest ik hier eerst onderzoek naar doen. Ik 
 
-![img.png](img.png)
+![img.png](./readme-images/img.png)
 <caption>Bron: https://medium.com/@ecemertrk/websocket-vs-sse-24e634930472</caption>
 
 ### Voortgangsgesprek Cyd
@@ -82,6 +82,8 @@ en zorg dat de controls groot genoeg zijn voor de gebruiker.
 ### 🧠 Conclusie
 
 ## 🚀 Week 4: Wrap-up
+
+### Hosting
 
 ### 🧠 Conclusie
 
