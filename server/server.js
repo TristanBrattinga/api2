@@ -133,7 +133,6 @@ app.get('/favorites', async (req, res) => {
 	const favorites = req.cookies.favorites ? JSON.parse(req.cookies.favorites) : []
 
 	if (favorites.length === 0) {
-		// Render the template with empty data
 		return res.send(renderTemplate('server/views/favorite.liquid', {
 			coins: [],
 			currentPage: page,
@@ -163,15 +162,13 @@ app.get('/favorites', async (req, res) => {
 
 	console.log(favorites)
 
-	// Retrieve the favorite coins from the CoinGecko API
 	const favoriteCoins = await fetchMarketData(queryParams.toString())
 
 	console.log(favoriteCoins)
 
-	// Render the template with the favorite coins
 	return res.send(renderTemplate('server/views/favorite.liquid', {
 		coins: favoriteCoins,
-		currentPage: page, // Set this to 1 or wherever you want to start
+		currentPage: page,
 		prevPage: page - 1,
 		nextPage: page + 1,
 		startItem: 1,

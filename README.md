@@ -59,23 +59,28 @@ Ik had geen idee wat SSE was, hoe het precies werkt en hoe het verschilt t.o.v. 
 de slag kon moest ik hier eerst onderzoek naar doen. Ik 
 
 ![img.png](./readme-images/img.png)
-<caption>Bron: https://medium.com/@ecemertrk/websocket-vs-sse-24e634930472</caption>
+Bron: https://medium.com/@ecemertrk/websocket-vs-sse-24e634930472
 
 ### Voortgangsgesprek Cyd
 
 Tijdens mijn eerste voortgangsgesprek met Cyd heb ik mijn prototype laten zien. Ik vertelde haar dat ik best wel zat te 
-worstelen met mijn concept en hoe dit er precies uit zou gaan zien. Ook had ik geen idee welke content API ik zou 
-moeten gebruiken 
+worstelen met mijn concept en hoe dit er precies uit zou moeten gaan zien. Ook had ik geen idee welke content API ik 
+zou moeten gebruiken binnen de context van mijn concept. Cyd kwam met de [Numbers API](http://numbersapi.com/#42).
 
 Zij gaf mij de tip om de flow van mijn web app uit te tekenen
 
-Verder was ze te spreken over mijn
-eerste styling en had hier en daar wat kleine verbeterpuntjes visueel gezien. Sommige hover-animaties zijn onnodig
+Verder was ze te spreken over mijn eerste styling en had hier en daar wat kleine verbeterpuntjes visueel gezien. Sommige hover-animaties zijn onnodig
 en zorg dat de controls groot genoeg zijn voor de gebruiker.
 
 ### 🧠 Conclusie
 
+Het is belangrijk dat ik de flow van mijn web app op papier zet zodat ik voor mijzelf visueel een richtlijn kan 
+creëren waar ik mij aan vast kan houden tijdens het ontwikkelen. 
+
 ## 🔄 Week 3: Switch-It-Up!
+
+In de derde week zat ik helemaal vast met mijn oude concept en was ik niet tevreden over de content API, waar ik mee 
+aan de slag zou gaan.
 
 ### Voortgangsgesprek Declan
 
@@ -84,6 +89,8 @@ en zorg dat de controls groot genoeg zijn voor de gebruiker.
 ## 🚀 Week 4: Wrap-up
 
 ### Hosting
+
+Ik wilde mijn Crypto Dashboard graag live zetten. 
 
 ### 🧠 Conclusie
 
