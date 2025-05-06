@@ -33,9 +33,9 @@
                     <form method="POST" action="/favorite">
                         <button aria-label="Favorite coin" class="favorite-button" name="coinId" value="{{ coin.id }}">
                             {% if favorites contains coin.id %}
-                                {% include 'server/icons/star-filled.svg.liquid' %}
+                                {% include 'server/icons/star-filled.svg' %}
                             {% else %}
-                                {% include 'server/icons/star.svg.liquid' %}
+                                {% include 'server/icons/star.svg' %}
                             {% endif %}
                         </button>
                     </form>

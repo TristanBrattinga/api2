@@ -54,7 +54,7 @@
                 <p>Max Supply</p>
                 {% if coin.market_data.max_supply == null %}
                     <span>
-                        {% include "server/icons/infinite.svg.liquid" %}
+                        {% include "server/icons/infinite.svg" %}
                     </span>
                 {% else %}
                     <p>{{ coin.market_data.max_supply }}</p>
@@ -70,7 +70,7 @@
             <li>
                 <p>Source Code</p>
                 <a class="button" href="{{ coin.links.repos_url.github[0] }}" target="_blank">
-                    <span>{% include "server/icons/github.svg.liquid" %}</span>
+                    <span>{% include "server/icons/github.svg" %}</span>
                     <p>Github</p>
                 </a>
             </li>

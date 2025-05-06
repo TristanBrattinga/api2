@@ -3,7 +3,7 @@ export const formatCurrency = (value, currency) => {
 
 	const valueIsSmall = value < 1
 
-	const locale = currency === 'eur' ? 'de-DE' : 'en-US'
+	const locale = currency === 'eur' ? 'nl-NL' : 'en-US'
 	const symbol = currency === 'eur' ? '€' : '$'
 
 	return (

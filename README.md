@@ -96,6 +96,16 @@ Ik wilde mijn Crypto Dashboard graag live zetten.
 
 ### Verdere Ontwikkelingen
 
+## Herkansing
+
+Punten van feedback voor de herkansing en dingen waar ik aan moet werken zijn:
+- svg files gwn .svg proberen anders .liquid
+- Vooral dingen afmaken niet nieuwe toevoegen
+    - lijstje maken!
+- Util Functie maken voor cookies
+- console.logs eruit halen
+
+
 ## 📚 Bronnen
 
 - 

@@ -7,6 +7,7 @@ import { Liquid } from 'liquidjs'
 import sirv from 'sirv'
 import { fetchCoinDetails, fetchCoinList, fetchMarketData } from './utils/api.js'
 import { getPaginationRange } from './utils/pagination.js'
+import { setCookie } from './utils/cookies.js'
 import bodyParser from 'body-parser'
 
 const engine = new Liquid({ extname: '.liquid' })
@@ -31,9 +32,8 @@ app.get('/', async (req, res) => {
 	const currency = req.query.currency || req.cookies.currency || 'usd'
 	const sort = req.query.sort || 'market_cap_desc'
 
-	if (!req.cookies.currency) {
-		res.setHeader('Set-Cookie', `currency=${currency} Path=/ Max-Age=${30 * 24 * 60 * 60}`)
-	}
+	// Set a cookie for the selected currency
+	setCookie(res, 'currency', currency)
 
 	// Build API query
 	const queryParams = new URLSearchParams({
@@ -160,11 +160,7 @@ app.get('/favorites', async (req, res) => {
 		price_change_percentage: '1h,24h,7d'
 	})
 
-	console.log(favorites)
-
 	const favoriteCoins = await fetchMarketData(queryParams.toString())
-
-	console.log(favoriteCoins)
 
 	return res.send(renderTemplate('server/views/favorite.liquid', {
 		coins: favoriteCoins,
@@ -194,11 +190,8 @@ app.post('/favorite', (req, res) => {
 		favorites.push(coinId)
 	}
 
-	res.cookie('favorites', JSON.stringify(favorites), {
-		path: '/',
-		maxAge: 30 * 24 * 60 * 60 * 1000,
-		httpOnly: false
-	})
+	// Save the favorites in a cookie
+	setCookie(res, 'favorites', JSON.stringify(favorites))
 
 	res.redirect(req.get('Referer') || '/')
 })
