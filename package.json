@@ -19,7 +19,6 @@
     "@tinyhttp/app": "^2.5.2",
     "@tinyhttp/cookie-parser": "^2.0.6",
     "@tinyhttp/logger": "^2.1.0",
-    "@tinyhttp/router": "^2.2.3",
     "body-parser": "^2.2.0",
     "chart.js": "^4.4.9",
     "chokidar-cli": "^3.0.0",

@@ -2,17 +2,15 @@ import 'dotenv/config'
 import { App } from '@tinyhttp/app'
 import { logger } from '@tinyhttp/logger'
 import { cookieParser } from '@tinyhttp/cookie-parser'
-import { Router } from '@tinyhttp/router'
 import { Liquid } from 'liquidjs'
 import sirv from 'sirv'
-import { fetchCoinDetails, fetchCoinList, fetchMarketData } from './utils/api.js'
+import { fetchCoinDetails, fetchCoinHistory, fetchCoinList, fetchMarketData } from './utils/api.js'
 import { getPaginationRange } from './utils/pagination.js'
 import { setCookie } from './utils/cookies.js'
 import bodyParser from 'body-parser'
 
 const engine = new Liquid({ extname: '.liquid' })
 const app = new App()
-const router = new Router()
 const limitOptions = [25, 50, 100, 200, 250]
 
 const clients = []
@@ -29,7 +27,7 @@ app.get('/', async (req, res) => {
 	const query = req.query.q?.toLowerCase() || ''
 	const page = parseInt(req.query.page) || 1
 	const limit = parseInt(req.query.limit) || 100
-	const currency = req.query.currency || req.cookies.currency || 'usd'
+	const currency =  req.cookies.currency
 	const sort = req.query.sort || 'market_cap_desc'
 
 	// Set a cookie for the selected currency
@@ -102,27 +100,27 @@ app.get('/coin/:id/', async (req, res) => {
 	}))
 })
 
-// app.get('/api/coin/:id/history', async (req, res) => {
-// 	const id = req.params.id
-// 	const currency = req.query.currency || req.cookies.currency || 'usd'
-//
-// 	const now = Math.floor(Date.now() / 1000)
-// 	const from = now - 7 * 24 * 60 * 60 // 7 days ago
-// 	const to = now
-//
-// 	try {
-// 		const history = await fetchCoinHistory(id, currency, from, to)
-// 		const chartData = {
-// 			labels: history.prices.map(price => new Date(price[0]).toLocaleDateString()),
-// 			prices: history.prices.map(price => price[1]),
-// 		}
-//
-// 		res.json(chartData)
-// 	} catch (error) {
-// 		console.error(error)
-// 		res.status(500).json({ error: 'Failed to fetch chart data' })
-// 	}
-// })
+app.get('/api/coin/:id/history', async (req, res) => {
+	const id = req.params.id
+	const currency = req.query.currency || req.cookies.currency || 'usd'
+
+	const now = Math.floor(Date.now() / 1000)
+	const from = now - 7 * 24 * 60 * 60 // 7 days ago
+	const to = now
+
+	try {
+		const history = await fetchCoinHistory(id, currency, from, to)
+		const chartData = {
+			labels: history.prices.map(price => new Date(price[0]).toLocaleDateString()),
+			prices: history.prices.map(price => price[1]),
+		}
+
+		res.json(chartData)
+	} catch (error) {
+		console.error(error)
+		res.status(500).json({ error: 'Failed to fetch chart data' })
+	}
+})
 
 app.get('/favorites', async (req, res) => {
 	const query = req.query.q?.toLowerCase() || ''

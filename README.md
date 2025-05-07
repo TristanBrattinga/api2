@@ -55,10 +55,14 @@ kamercode zich bij aan kunnen sluiten.
 
 ### WebSockets v.s SSE
 
-Ik had geen idee wat SSE was, hoe het precies werkt en hoe het verschilt t.o.v. WebSockets. Voordat ik hiermee aan 
-de slag kon moest ik hier eerst onderzoek naar doen. Bij WebSockets is het zo dat er tweezijdig request en respones 
-kunnen worden gestuurd door de client en server. Zo kan er real-time communicatie plaatsvinden tussen client en 
-server. Bij SSE is het zo dat er alleen vanaf de server real-time "events" kunnen worden gestuurd naar de client.
+Ik had geen idee wat SSE was, hoe het precies werkt en hoe het verschilt van. WebSockets. Voordat ik hiermee aan 
+de slag kon moest ik hier eerst onderzoek naar doen. Bij WebSockets kunnen zowel de client als de server request en 
+respones elkaar kunnen sturen. Zo kan er real-time communicatie plaatsvinden tussen de client en server. Bij SSE 
+kunnen daarentegen alleen real-time "events" van de server naar de client worden gestuurd. Hier is dus geen 
+wederzijdse real-time communicatie mogelijk, maar alleen eenzijdig. Dit is dus perfect voor wanneer er real-time 
+updates moeten worden gestuurd vanaf de server naar de client in het geval van een live-score website voor 
+sportuitslagen, maar ook voor mijn idee waarbij er vragen worden gestuurd naar de client en deze hierop moet antwoorden.
+
 ![img.png](./readme-images/img.png)
 Bron: https://medium.com/@ecemertrk/websocket-vs-sse-24e634930472
 
@@ -81,7 +85,56 @@ creëren waar ik mij aan vast kan houden tijdens het ontwikkelen.
 ## 🔄 Week 3: Switch-It-Up!
 
 In de derde week zat ik helemaal vast met mijn oude concept en was ik niet tevreden over de content API waar ik mee 
-aan de slag zou gaan.
+aan de slag zou gaan. Het voelde niet goed dus heb ik besloten om mijn concept helemaal om te gooien. Ik hou mijzelf 
+veel bezig met crypto dus het leek mij een leuk en toepasselijk idee, om een crypto dashboard te bouwen waarbij je 
+real-time prijs updates zou krijgen, waar je favoriete coins kan toevoegen en met verschillende valuta's kan werken. 
+
+Op deze manier kon ik heel makkelijk een goede content API aan mijn idee koppelen. Ik heb wat onderzoek gedaan naar 
+de volgende API's:
+
+1. [CoinMarketCap](https://coinmarketcap.com/api/pricing/), dit is de nummer 1 crypto tracking website alleen bij het free-plan zit er geen historische data 
+   van de coins bij en zou ik wel graag willen.
+2. [CoinGecko](https://docs.coingecko.com/v3.0.1/reference/introduction), dit is een heel erg uitgebreide API met heel veel data beschikbaar via het free-plan. Historische data 
+   is beschikbaar en er zijn heel veel verschillende endpoints om data mee op te vragen.
+3. [Bitvavo](https://docs.bitvavo.com/docs/rest-api/rest-api/), de REST API van bitvavo is meer bedoeld voor persoonlijk gebruik waarbij je je eigen account kan managen,
+   coins kopen en verkopen. Dit is niet echt van toepassing op mijn project.
+
+Ik heb uiteindelijk voor de CoinGecko API gekozen! De documentatie website en alle beschikbare data en informatie gaf 
+mij een hele goede indruk bij dit platform. Ik kon gemakkelijk een API key aanmaken en ik heb 10.000 maandelijkse 
+API calls inbegrepen bij mijn free-plan.
+
+Ik heb een api.js file gecreëerd waarin ik een aantal utility functions heb geschreven voor het aanroepen van 
+verschillende endpoints. Hieronder is de eerste functie te zien om de gehele lijst met coins op te halen:
+
+```javascript
+export const fetchCoinList = async () => {
+	try {
+		const response = await fetch(`${process.env.COINGECKO_API_BASE_URL}/coins/list`, {
+			method:  'GET',
+			headers: {
+				accept: 'application/json',
+				'x-cg-demo-api-key': process.env.COINGECKO_API_KEY
+			}
+		})
+
+		if (!response.ok) {
+			throw new Error('Failed to fetch coin list')
+		}
+
+		return await response.json()
+
+	} catch (error) {
+		console.error('Error fetching coin list:', error)
+		throw error
+	}
+}
+```
+
+Deze roep ik in mijn server.js file aan op de volgende manier:
+
+```javascript
+const coinList = await fetchCoinList()
+```
 
 ### Voortgangsgesprek Declan
 
@@ -93,7 +146,24 @@ omdat wat ik nu had redelijk "saai" zou zijn. Het is dus wel heel belangrijk om 
 
 ### 🧠 Conclusie
 
+Ik moet ervoor zorgen dat mijn crypto dashboard aangekleed genoeg wordt, om ervoor te zorgen dat het niet te "saai" 
+en "simpel" wordt. Het lijkt mij daarom een vet idee om charts met historische data toe te voegen zodat je kan zien 
+hoe de coins het over tijd doen.
+
 ## 🚀 Week 4: Wrap-up
+
+In week 4 ben ik vooral bezig geweest met styling en het werken krijgen van de SSE. Ik heb mijn styling gebaseerd 
+op andere crypto websites zoals die van CoinGecko en CoinMarketCap. 
+
+<img src="./readme-images/coinly.png" width="800" alt="coinly dashboard">
+
+### Web API's
+
+Ik heb uiteindelijk drie verschillende web api's geïntegreerd in mijn project. Dit zijn de volgende:
+
+1. Server-Sent Events
+2. Notification API
+3. Share API
 
 ### Hosting
 
@@ -111,13 +181,16 @@ heel gemakkelijk env's toevoegen, een eigen domeinnaam instellen en re-deployen 
 
 ### 🧠 Conclusie
 
+Ik ben heel blij met mijn gemaakte keuzes! Ik ben tevreden met de keuze voor het veranderen van mijn opdracht en ik 
+vond de API van CoinGecko heel fijn werken en heel duidelijk.
+
 ### Verdere Ontwikkelingen
 
 Als ik meer tijd zou hebben om verder te werken aan dit project, of überhaupt 4 volledige weken aan dit vak had 
 kunnen besteden zou ik de volgende functionaliteiten implementeren en/of verder uitwerken:
 
 1. Currency converter
-2. 
+2. Meerdere valuta's toevoegen
 3. Valuta selecteren gebaseerd op locale
 
 ## Herkansing
@@ -131,4 +204,4 @@ Punten van feedback voor de herkansing en dingen waar ik aan moet werken zijn:
 
 ## 📚 Bronnen
 
-- 
+- https://docs.coingecko.com/v3.0.1/reference/introduction
