@@ -84,6 +84,12 @@ aan de slag zou gaan.
 
 ### Voortgangsgesprek Declan
 
+Mijn voortgangsgesprek met Declan verliep een beetje apart, omdat ik hem nog niet eerder over mijn code had kunnen 
+spreken. Dit kwam mede door mijn afwezigheid de eerste week en omdat mijn "eerste" feedbackgesprek met Cyd was.
+
+Punten van feedback:
+- 
+
 ### 🧠 Conclusie
 
 ## 🚀 Week 4: Wrap-up
@@ -96,15 +102,30 @@ Ik wilde mijn Crypto Dashboard graag live zetten.
 
 ### Verdere Ontwikkelingen
 
+Als ik nog veel meer tijd had gehad en misschien 4 weken aan één idee had kunnen werken, dan had ik graag de 
+volgende functionaliteiten verder uitgewerkt en toegevoegd:
+
+1. Currency converter
+2. Meerdere verschillende valuta's
+3.
+
+Ik ben zelf ook heel erg geïnteresseerd in crypto, dus ik zou hier zeker nog verder aan kunnen werken en het meer 
+naar mijn eigen hand ontwikkelen. Op deze manier zou ik mijn schoolopdracht ook voor mijn hobby kunnen gebruiken, 
+wat wel een hele leuke uitkomst zou kunnen zijn.
+
 ## Herkansing
 
 Punten van feedback voor de herkansing en dingen waar ik aan moet werken zijn:
-- svg files gwn .svg proberen anders .liquid
-- Vooral dingen afmaken niet nieuwe toevoegen
-    - lijstje maken!
-- Util Functie maken voor cookies
-- console.logs eruit halen
+- svg files gwn .svg proberen anders .liquid (DONE ✅)
+- Vooral dingen afmaken niet nieuwe toevoegen, lijstje maken! (DONE ✅)
+- Util Functie maken voor cookies (DONE ✅)
+- console.logs eruit halen (DONE ✅)
 
+Een van de feedback punten was om een lijstje te maken met mogelijke verbeteringen binnen mijn code:
+
+- Fix pagination when searching
+- Fix SSE on the client
+- Hookup favorite on the detail page
 
 ## 📚 Bronnen
 
