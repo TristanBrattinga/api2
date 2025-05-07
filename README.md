@@ -56,8 +56,9 @@ kamercode zich bij aan kunnen sluiten.
 ### WebSockets v.s SSE
 
 Ik had geen idee wat SSE was, hoe het precies werkt en hoe het verschilt t.o.v. WebSockets. Voordat ik hiermee aan 
-de slag kon moest ik hier eerst onderzoek naar doen. Ik 
-
+de slag kon moest ik hier eerst onderzoek naar doen. Bij WebSockets is het zo dat er tweezijdig request en respones 
+kunnen worden gestuurd door de client en server. Zo kan er real-time communicatie plaatsvinden tussen client en 
+server. Bij SSE is het zo dat er alleen vanaf de server real-time "events" kunnen worden gestuurd naar de client.
 ![img.png](./readme-images/img.png)
 Bron: https://medium.com/@ecemertrk/websocket-vs-sse-24e634930472
 
@@ -79,10 +80,16 @@ creëren waar ik mij aan vast kan houden tijdens het ontwikkelen.
 
 ## 🔄 Week 3: Switch-It-Up!
 
-In de derde week zat ik helemaal vast met mijn oude concept en was ik niet tevreden over de content API, waar ik mee 
+In de derde week zat ik helemaal vast met mijn oude concept en was ik niet tevreden over de content API waar ik mee 
 aan de slag zou gaan.
 
 ### Voortgangsgesprek Declan
+
+Mijn voortgangsgesprek met Declan verliep een beetje apart, omdat ik hem nog niet eerder over mijn code had kunnen
+spreken. Dit kwam mede door mijn afwezigheid de eerste week en omdat mijn "eerste" feedbackgesprek met Cyd was en
+niet met hem. Het enige wat hij dus echt kon doen was uitlezen wat Cyd had geschreven over mijn idee en voortgang.
+Hierin stond dat ik een leuk en origineel idee had, mede hierom vond Declan het jammer dat ik was geswitcht. Vooral
+omdat wat ik nu had redelijk "saai" zou zijn. Het is dus wel heel belangrijk om mijn prototype goed aan te kleden.
 
 ### 🧠 Conclusie
 
@@ -90,21 +97,37 @@ aan de slag zou gaan.
 
 ### Hosting
 
-Ik wilde mijn Crypto Dashboard graag live zetten. 
+Ik wilde mijn Crypto Dashboard graag live zetten. Mijn server moet natuurlijk ergens worden gehost dus dit kan niet 
+op platformen als Vercel of Github Pages. Ik heb voorheen wel met [Render](https://render.com/) gewerkt, maar dit is 
+heel langzaam en werkte nooit echt naar behoren voor mij. Tijdens mijn korte stage heb ik wat met 
+[Railway](https://railway.com/) gewerkt en dit vond ik een heel fijn platform om te gebruiken dus dit ben ik gaan 
+uitproberen. Ik kon heel makkelijk een account aanmaken en het is pay-per-use. Ik krijg $5.00 voor mijn trial en er 
+wordt gezegd dat bij een low-level server (wat in mijn geval ook zo is), je er een maand mee door kan.  
+
+<img src="./readme-images/railway.png" width="800" alt="railway dashboard">
+
+Ik vind het een heel overzichtelijk en gebruiksvriendelijk platform, dus ik zou dit product zeker aanraden! Ik kon 
+heel gemakkelijk env's toevoegen, een eigen domeinnaam instellen en re-deployen wanneer nodig.
 
 ### 🧠 Conclusie
 
 ### Verdere Ontwikkelingen
 
+Als ik meer tijd zou hebben om verder te werken aan dit project, of überhaupt 4 volledige weken aan dit vak had 
+kunnen besteden zou ik de volgende functionaliteiten implementeren en/of verder uitwerken:
+
+1. Currency converter
+2. 
+3. Valuta selecteren gebaseerd op locale
+
 ## Herkansing
 
 Punten van feedback voor de herkansing en dingen waar ik aan moet werken zijn:
-- svg files gwn .svg proberen anders .liquid
-- Vooral dingen afmaken niet nieuwe toevoegen
+- svg files gwn .svg proberen anders .liquid (DONE ✅)
+- Vooral dingen afmaken niet nieuwe toevoegen (DONE ✅)
     - lijstje maken!
-- Util Functie maken voor cookies
-- console.logs eruit halen
-
+- Util Functie maken voor cookies (DONE ✅)
+- console.logs eruit halen (DONE ✅)
 
 ## 📚 Bronnen
 
