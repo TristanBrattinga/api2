@@ -157,8 +157,6 @@ op andere crypto websites zoals die van CoinGecko en CoinMarketCap.
 
 <img src="./readme-images/coinly.png" width="800" alt="coinly dashboard">
 
-
-
 ### Web API's
 
 Ik heb uiteindelijk drie verschillende web api's geïntegreerd in mijn project. Dit zijn de volgende:
@@ -196,6 +194,9 @@ kunnen besteden zou ik de volgende functionaliteiten implementeren en/of verder 
 1. Currency converter
 2. Meerdere valuta's toevoegen
 3. Valuta selecteren gebaseerd op locale
+4. Favorites werkend maken vanuit de detailpage
+5. Database toevoegen
+6. User authentication toevoegen
 
 ## Herkansing
 
