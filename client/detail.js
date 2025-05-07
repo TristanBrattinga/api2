@@ -32,7 +32,7 @@ import {
 
 Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, Tooltip);
 
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async () => {
 	const res = await fetch(`/api/coin/bitcoin/history?currency=usd`);
 	const chartData = await res.json();
 

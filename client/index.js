@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const timerText = document.querySelector('#indicatorText')
 
 	if (fill && timerText) {
-		function updateProgressBar() {
+		const updateProgressBar = () => {
 			const now = Date.now()
 			const elapsed = (now - lastUpdate) / 1000
 			const remaining = Math.max(60 - elapsed, 0)

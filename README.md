@@ -157,6 +157,8 @@ op andere crypto websites zoals die van CoinGecko en CoinMarketCap.
 
 <img src="./readme-images/coinly.png" width="800" alt="coinly dashboard">
 
+
+
 ### Web API's
 
 Ik heb uiteindelijk drie verschillende web api's geïntegreerd in mijn project. Dit zijn de volgende:
@@ -182,7 +184,9 @@ heel gemakkelijk env's toevoegen, een eigen domeinnaam instellen en re-deployen 
 ### 🧠 Conclusie
 
 Ik ben heel blij met mijn gemaakte keuzes! Ik ben tevreden met de keuze voor het veranderen van mijn opdracht en ik 
-vond de API van CoinGecko heel fijn werken en heel duidelijk.
+vond de API van CoinGecko heel fijn werken en heel duidelijk. Ik ben zeer te spreken over mijn uiteindelijke 
+dashboard en ik zou hier graag nog verder aan willen gaan werken om het nog verder uit te breiden en volledig 
+werkend te maken.
 
 ### Verdere Ontwikkelingen
 
